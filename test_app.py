@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from PIL import Image
 from datetime import datetime
-from zeroinfo import ZoneInfo
+#from zeroinfo import ZoneInfo
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -198,7 +198,8 @@ async def api_generate(file: UploadFile = File(...), mode: str = Form("horizonta
     prompt = "写真の状況を分析した140文字程度の日記。たまに関係ない「頓珍漢なこと」を10%程度の確率で1文混ぜ、最後に五七五の一句を添えて。"
     response = model.generate_content([prompt, image])
     diary_text = response.text
-    today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y.%m.%d")
+    jst = timezone(timedelta(hours=+9), 'JST)
+    today = datetime.now(jst).strftime("%Y.%m.%d")
 
     # DB保存
     conn = sqlite3.connect("photolog.db")
