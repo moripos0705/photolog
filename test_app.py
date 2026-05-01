@@ -208,7 +208,7 @@ async def api_generate(file: UploadFile = File(...), mode: str = Form("horizonta
         "id": diary_id,
         "date": today,
         "content": diary_text,
-        "image_url": f"/{save_path}",
+        "image_path": f"/{save_path}",
         "mode": mode
     }
 
@@ -222,6 +222,8 @@ async def history():
     cursor.execute("SELECT * FROM diaries ORDER BY id DESC")
     rows = cursor.fetchall()
     conn.close()
+    #辞書のリストに変換してデータとして返す
+    return [dict(row) for row in rows]
 
     # カード形式で並べるHTML
     cards_html = ""
