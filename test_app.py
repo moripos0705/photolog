@@ -8,6 +8,7 @@ import calendar as pycalendar
 from fastapi import FastAPI, UploadFile, File, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import google.generativeai as genai
 from PIL import Image
@@ -17,6 +18,12 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], #すべてのアクセスを許可
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # staticフォルダをブラウザからアクセス可能にする設定
 app.mount("/static", StaticFiles(directory="static"), name="static")
